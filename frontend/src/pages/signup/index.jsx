@@ -60,7 +60,7 @@ const SignUp = () => {
                         />
                         <div className="pt-4">
                             <Button
-                                label="Login"
+                                label="Signup"
                                 type="submit"
                             />
                         </div>

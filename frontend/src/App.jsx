@@ -1,6 +1,7 @@
 import { useState } from "react"
-import Input from "./components/input"
-import Button from "./components/button";
+
+import Input from "@/components/input"
+import Button from "@/components/button";
 
 function App() {
 

@@ -12,7 +12,7 @@ const Input = (props) => {
   return (
     <div className="space-y-1">
       {label ? <label
-         className="text-[14px]"
+         className="text-[14px] text-white"
       >{label}</label> : null}
       <div>
         <input

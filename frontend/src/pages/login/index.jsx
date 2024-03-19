@@ -19,10 +19,18 @@ const Login = () => {
     }))
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('formdata', formData)
-  }
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/get/login",
+        formData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-2 min-h-screen w-screen">

@@ -1,6 +1,6 @@
-const msql = require("mysql2");
+const mysql = require("mysql2");
 
-const connection = msql.createConnection({
+const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
@@ -9,8 +9,8 @@ const connection = msql.createConnection({
 
 connection.connect((err) => {
   if (err) {
-    console.log("something went wrong");
+    console.error("Error connecting to database:", err.message);
   } else {
-    console.log("connected successfully!");
+    console.log("Connected successfully!");
   }
 });

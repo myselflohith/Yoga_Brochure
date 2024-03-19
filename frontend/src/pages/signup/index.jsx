@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -19,17 +19,16 @@ const SignUp = () => {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
     console.log("formdata", formData);
     try {
-      fetch("http://localhost:5000/api/v1/insert/register", {
-        method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        body: formData,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/insert/register",
+        formData
+      );
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

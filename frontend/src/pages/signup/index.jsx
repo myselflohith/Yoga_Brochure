@@ -2,8 +2,9 @@ import person from "@/assets/person.png";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,17 +19,20 @@ const SignUp = () => {
       [name]: value,
     }));
   };
-
+  const nav = useNavigate();
   const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    console.log("formdata", formData);
+    
+    // console.log("formdata", formData);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/v1/insert/register",
         formData
       );
       console.log(response.data);
+      if (response.data) {
+        nav("/login");
+      }
     } catch (error) {
       console.log(error);
     }

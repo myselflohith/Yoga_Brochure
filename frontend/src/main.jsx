@@ -7,6 +7,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import "./index.css";
 import Admin from "./pages/admin";
+import ShowData from "./test/ShowData";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/showdata" element={<ShowData />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

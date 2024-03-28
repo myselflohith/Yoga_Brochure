@@ -2,9 +2,9 @@ import { query } from "../configure/configure.js";
 import { hash, compare } from "bcrypt";
 
 const insertUser = async (req, res) => {
-  console.log(req.body);
   try {
     const { name, email, password } = req.body;
+
     if (!name || !email || !password) {
       return res
         .status(400)
@@ -14,20 +14,21 @@ const insertUser = async (req, res) => {
     const hashedPassword = await hash(password, 10);
 
     const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    query(sql, [name, email, hashedPassword], (err, result) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ success: false, message: "Database error" });
-      }
-      res
+
+    const result = await query(sql, [name, email, hashedPassword]);
+
+    if (result && result.affectedRows === 1) {
+      return res
         .status(200)
-        .send({ success: true, message: "User registered successfully" });
-    });
+        .json({ success: true, message: "User registered successfully" });
+    } else {
+      throw new Error("Failed to insert user into the database");
+    }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error("Error inserting user:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 

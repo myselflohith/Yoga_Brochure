@@ -5,12 +5,12 @@ export const getData = async (req, res) => {
     query(sql, (err, result) => {
       if (err) {
         console.log(err);
-        res.status(400).json({ success: "false", msg: "something went wrong" });
+        res.status(400).json({ success: false, msg: "something went wrong" });
       }
-      res.status(200).json({ success: "true", data: result });
+      res.status(200).json({ success: true, data: result });
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: "false", msg: "Internal server error" });
+    res.status(500).json({ success: false, msg: "Internal server error" });
   }
 };

@@ -22,15 +22,13 @@ const SignUp = () => {
   const nav = useNavigate();
   const onSubmit = async (e) => {
     e.preventDefault();
-    
-    // console.log("formdata", formData);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/v1/insert/register",
         formData
       );
-      console.log(response.data);
-      if (response.data) {
+      console.log("Response:", response);
+      if (response.data.success) {
         nav("/login");
       }
     } catch (error) {

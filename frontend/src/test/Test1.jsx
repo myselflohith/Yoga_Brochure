@@ -14,7 +14,7 @@ const Test1 = () => {
     );
 
     try {
-      let cloudName = "dfdgmkmhr";
+      let cloudName = "dcnvhqmfd";
       let resourceType = type === "image" ? "image" : "video";
       let api = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
 
@@ -109,3 +109,9 @@ const Test1 = () => {
 };
 
 export default Test1;
+
+
+
+
+
+

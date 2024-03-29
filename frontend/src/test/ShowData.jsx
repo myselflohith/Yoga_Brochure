@@ -1,72 +1,61 @@
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-
-// const ShowData = () => {
-//   const [data, setData] = useState([]);
-//   const fetchData = async () => {
-//     try {
-//       const response = await axios.get(
-//         "http://localhost:5000/api/v1/getf/getdata"
-//       );
-//       console.log(response.data);
-//       setData(response.data);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-//   return <div>{JSON.stringify(data)}</div>;
-// };
-
-// export default ShowData;
-
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
 
-function MediaGallery() {
-  const [mediaData, setMediaData] = useState([]);
+const ShowData = () => {
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/getf/getdata"
+        );
+        setData(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
 
-  async function fetchData() {
-    try {
-      const response = await fetch("http://localhost:5000/api/v1/getf/getdata");
-      const data = await response.json();
-      setMediaData(data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+  const nextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, data.length - 1));
+  };
 
-  function createMediaElement(media) {
-    if (media.type === "video") {
-      return (
-        <video controls width="400">
-          <source src={media.url} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      );
-    } else if (media.type === "image") {
-      return <img src={media.url} alt="Image" width="400" />;
-    }
-  }
+  const prevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
 
   return (
-    <div
-      className="media-gallery"
-      style={{ display: "flex", justifyContent: "center" }}
-    >
-      {mediaData.map((media, index) => (
-        <div key={index} className="media-item">
-          {createMediaElement(media)}
-        </div>
-      ))}
+    <div className="flex justify-center items-center h-screen">
+      <button onClick={prevPage} disabled={currentPage === 0}>
+        Previous
+      </button>
+      <div className="flip-container">
+        {data.length > 0 && (
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0, rotateY: 180 }}
+            animate={{ opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }} // Adding smooth transition with easeInOut
+            className="w-full max-w-screen-lg h-80 border border-gray-300 overflow-hidden flip-card"
+            style={{
+              backgroundImage: `url(${data[currentPage].url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              width: "500px",
+              borderRadius: "10px",
+            }}
+          />
+        )}
+      </div>
+      <button onClick={nextPage} disabled={currentPage === data.length - 1}>
+        Next
+      </button>
     </div>
   );
-}
+};
 
-export default MediaGallery;
+export default ShowData;

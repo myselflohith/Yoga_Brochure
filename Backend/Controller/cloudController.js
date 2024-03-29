@@ -19,18 +19,19 @@ const insertFileIntoDB = async (type, url) => {
   }
 };
 
-
 export const insertImg = async (req, res, next) => {
   console.log(req.body);
-  const { imgUrl } = req.body;
+  const { imgUrls } = req.body;
 
-  if (!imgUrl) {
+  if (!imgUrls) {
     res.status(400);
     return next(new Error("imgUrl  are required"));
   }
 
   try {
-    insertFileIntoDB(img, imgUrl);
+    for (const imgUrl of imgUrls) {
+      await insertFileIntoDB(img, imgUrl);
+    }
 
     res.status(201).json({
       success: true,
@@ -42,17 +43,18 @@ export const insertImg = async (req, res, next) => {
     next(error);
   }
 };
+
 export const insertVid = async (req, res, next) => {
   console.log(req.body);
-  const { videoUrl } = req.body;
+  const { vidUrl } = req.body;
 
-  if (!videoUrl) {
+  if (!vidUrl) {
     res.status(400);
     return next(new Error("videoUrl fields are required"));
   }
 
   try {
-    insertFileIntoDB(vid, videoUrl);
+    await insertFileIntoDB(vid, vidUrl);
 
     res.status(201).json({
       success: true,

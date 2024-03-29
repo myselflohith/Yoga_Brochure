@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Test1 = () => {
-  const [img, setImg] = useState(null);
+  const [images, setImages] = useState([]);
   const [video, setVideo] = useState(null);
 
-  const uploadFile = async (type) => {
+  const uploadFile = async (file, type) => {
     const data = new FormData();
-    data.append("file", type === "image" ? img : video);
+    data.append("file", file);
     data.append(
       "upload_preset",
       type === "image" ? "image_preset" : "videos_preset"
@@ -20,97 +20,89 @@ const Test1 = () => {
 
       const res = await axios.post(api, data);
       const { secure_url } = res.data;
-      console.log(secure_url);
       return secure_url;
     } catch (error) {
       console.error(error);
     }
   };
 
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       setLoading(true);
-
-  //       const imgUrl = await uploadFile("image");
-
-  //       const videoUrl = await uploadFile("video");
-
-  //       await axios.post(`http://localhost:5000/api/v1/files/upld`, {
-  //         imgUrl,
-  //         videoUrl,
-  //       });
-
-  //       setImg(null);
-  //       setVideo(null);
-
-  //       console.log("File upload success!");
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  const handlevid = async (e) => {
+  const handleVideoSubmit = async (e) => {
     e.preventDefault();
     try {
-      const videoUrl = await uploadFile("video");
-  
+      const vidUrl = await uploadFile(video, "video");
+
       await axios.post(`http://localhost:5000/api/v1/files/upld/vid`, {
-        videoUrl,
+        vidUrl,
       });
+
       setVideo(null);
 
-      console.log("File upload success!");
+      console.log("Video upload success!");
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleimg = async (e) => {
+  const handleImageSubmit = async (e) => {
     e.preventDefault();
     try {
-      const imgUrl = await uploadFile("image");
-    
+      const imgUrlPromises = images.map(async (image) => {
+        return await uploadFile(image, "image");
+      });
+      const imgUrls = await Promise.all(imgUrlPromises);
 
       await axios.post(`http://localhost:5000/api/v1/files/upld/img`, {
-        imgUrl,
+        imgUrls,
       });
-      setImg(null);
-      console.log("File upload success!");
+
+      setImages([]);
+
+      console.log("Images upload success!");
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
-    <div>
-      <form onSubmit={handlevid}>
-        <div>
-          <label htmlFor="video">Video:</label>
-          <br />
-          <input
-            type="file"
-            accept="video/*"
-            id="video"
-            onChange={(e) => setVideo((prev) => e.target.files[0])}
-          />
-        </div>
-        <br />
-        <button type="submit">Upload</button>
+    <div className="max-w-md mx-auto mt-8">
+      <form onSubmit={handleVideoSubmit} className="mb-8">
+        <label htmlFor="video" className="block mb-2">
+          Video:
+        </label>
+        <input
+          type="file"
+          accept="video/*"
+          id="video"
+          onChange={(e) => setVideo(e.target.files[0])}
+          className="border border-gray-300 rounded p-2 mb-2"
+        />
+        <button
+          style={{ border: "1px solid balck", color: "black" }}
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Upload Video
+        </button>
       </form>
-      <br />
-      <form onSubmit={handleimg}>
-        <div>
-          <label htmlFor="img">Image:</label>
-          <br />
-          <input
-            type="file"
-            accept="image/*"
-            id="img"
-            onChange={(e) => setImg((prev) => e.target.files[0])}
-          />
-        </div>
-        <br />
-        <button type="submit">Upload</button>
+      <form onSubmit={handleImageSubmit} className="mb-8">
+        <label htmlFor="img" className="block mb-2">
+          Images:
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          id="img"
+          onChange={(e) => setImages(Array.from(e.target.files))}
+          multiple
+          className="border border-gray-300 rounded p-3 mb-2"
+        />
+        <button
+          type="submit"
+          className="bg-blue-100 text-white px-4 py-5 rounded hover:bg-blue-600"
+          style={{ border: "1px solid balck", color: "black" }}
+        >
+          Upload Images
+        </button>
       </form>
     </div>
   );

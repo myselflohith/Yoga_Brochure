@@ -23,8 +23,7 @@
 
 // export default ShowData;
 
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function MediaGallery() {
   const [mediaData, setMediaData] = useState([]);
@@ -35,29 +34,32 @@ function MediaGallery() {
 
   async function fetchData() {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/getf/getdata');
+      const response = await fetch("http://localhost:5000/api/v1/getf/getdata");
       const data = await response.json();
       setMediaData(data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   }
 
   function createMediaElement(media) {
-    if (media.type === 'video') {
+    if (media.type === "video") {
       return (
         <video controls width="400">
           <source src={media.url} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       );
-    } else if (media.type === 'image') {
+    } else if (media.type === "image") {
       return <img src={media.url} alt="Image" width="400" />;
     }
   }
 
   return (
-    <div className="media-gallery">
+    <div
+      className="media-gallery"
+      style={{ display: "flex", justifyContent: "center" }}
+    >
       {mediaData.map((media, index) => (
         <div key={index} className="media-item">
           {createMediaElement(media)}

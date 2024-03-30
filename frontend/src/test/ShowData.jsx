@@ -61,7 +61,6 @@
 
 // export default ShowData;
 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -70,6 +69,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 const ShowData = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const recordsPerPage = 4;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +77,22 @@ const ShowData = () => {
         const response = await axios.get(
           "http://localhost:5000/api/v1/getf/getdata"
         );
-        setData(response.data.data);
+
+        // Sort records by upload date in descending order
+        const sortedData = response.data.data.sort(
+          (a, b) => new Date(b.upload_date) - new Date(a.upload_date)
+        );
+
+        // Find the latest upload date
+        const latestDate = sortedData[0].upload_date;
+        console.log(latestDate);
+
+        const latestRecords = sortedData.filter(
+          (item) => item.upload_date.split("T")[0] === latestDate.split("T")[0]
+        );
+
+        console.log(latestRecords);
+        setData(latestRecords);
       } catch (error) {
         console.log(error);
       }
@@ -86,17 +101,24 @@ const ShowData = () => {
   }, []);
 
   const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, data.length - 1));
+    setCurrentPage((prevPage) =>
+      Math.min(prevPage + 1, Math.ceil(data.length / recordsPerPage) - 1)
+    );
   };
 
   const prevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  const paginatedData = data.slice(
+    currentPage * recordsPerPage,
+    (currentPage + 1) * recordsPerPage
+  );
+
   return (
     <div className="container-fluid flex flex-col items-center justify-center h-screen relative">
       <div className="flip-container mb-4 relative">
-        {data.length > 0 && (
+        {paginatedData.length > 0 && (
           <motion.div
             key={currentPage}
             initial={{ opacity: 0, rotateY: 180 }}
@@ -111,62 +133,63 @@ const ShowData = () => {
               borderRadius: "10px",
             }}
           >
-            {data[currentPage].type === "image" && (
-              <img
-                src={data[currentPage].url}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            )}
-            {data[currentPage].type === "video" && (
-              <video
-                autoPlay
-                controls
-                className="w-full h-full object-cover"
-              >
-                <source src={data[currentPage].url} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            )}
-
+            {paginatedData.map((item, index) => (
+              <React.Fragment key={index}>
+                {item.type === "image" && (
+                  <img
+                    src={item.url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                {item.type === "video" && (
+                  <video
+                    autoPlay
+                    controls
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={item.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </React.Fragment>
+            ))}
           </motion.div>
         )}
       </div>
       <div className="button-container">
-        <button className="btn btn-primary ms-3"
+        <button
+          className="btn btn-primary ms-3"
           data-tooltip="Previous"
           onClick={prevPage}
           disabled={currentPage === 0}
         >
           <FaArrowLeft />
         </button>
-        <button className="btn btn-primary ms-3"
+        <button
+          className="btn btn-primary ms-3"
           data-tooltip="Next"
           onClick={nextPage}
-          disabled={currentPage === data.length - 1}
+          disabled={currentPage === Math.ceil(data.length / recordsPerPage) - 1}
         >
           <FaArrowRight />
         </button>
       </div>
 
-
       <p className="mt-4 text-center">
-        {data.length > 0 && `This is image ${currentPage + 1} of ${data.length}`}
+        {paginatedData.length > 0 &&
+          `Page ${currentPage + 1} of ${Math.ceil(
+            data.length / recordsPerPage
+          )}`}
       </p>
-      {currentPage === data.length - 1 && (
-        <p className="mt-4 text-center">You have finished viewing all images.</p>
+      {currentPage === Math.ceil(data.length / recordsPerPage) - 1 && (
+        <p className="mt-4 text-center">You have finished viewing all pages.</p>
       )}
     </div>
   );
 };
 
 export default ShowData;
-
-
-
-
-
-
 
 // import axios from "axios";
 // import { motion } from "framer-motion";
@@ -243,7 +266,6 @@ export default ShowData;
 // };
 
 // export default ShowData;
-
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";

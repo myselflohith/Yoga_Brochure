@@ -75,11 +75,11 @@ const Test1 = () => {
           id="video"
           onChange={(e) => setVideo(e.target.files[0])}
           className="border border-gray-300 rounded p-2 mb-2"
-        />
+        /> <br />
         <button
-          style={{ border: "1px solid balck", color: "black" }}
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className=" btn btn-info text-black bg-blue-100  rounded hover:bg-blue-600"
+          style={{ border: "1px solid balck", color: "black" }}
         >
           Upload Video
         </button>
@@ -98,7 +98,7 @@ const Test1 = () => {
         />
         <button
           type="submit"
-          className="bg-blue-100 text-white px-4 py-5 rounded hover:bg-blue-600"
+          className=" btn btn-info text-black bg-blue-100  rounded hover:bg-blue-600"
           style={{ border: "1px solid balck", color: "black" }}
         >
           Upload Images

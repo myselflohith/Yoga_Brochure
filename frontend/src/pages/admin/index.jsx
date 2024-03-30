@@ -13,9 +13,11 @@ const Admin = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl mb-4">Admin Page</h1>
-      <button className="bg-blue-500 hover:bg-blue-600 text-black font-bold py-2 px-4 rounded" onClick={handleLogout}>
-        Logout
-      </button>
+      <div className="flex justify-end mb-4">
+        <button className="bg-blue-500 btn btn-warning hover:bg-blue-600 text-black font-bold py-2 px-4 rounded" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       <div className="mt-8">
         <Test1 />
       </div>
@@ -24,7 +26,6 @@ const Admin = () => {
 };
 
 export default Admin;
-
 
 // import Test1 from "@/test/Test1";
 // import React from "react";

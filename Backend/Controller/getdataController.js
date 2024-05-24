@@ -1,4 +1,4 @@
-import { query } from "../configure/configure.js";
+import { query } from "../Configure/configure.js";
 export const getData = async (req, res) => {
   try {
     const sql = `select * from cloud`;

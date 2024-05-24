@@ -31,9 +31,10 @@ const Test1 = () => {
     try {
       const vidUrl = await uploadFile(video, "video");
 
-      await axios.post(`http://localhost:5000/api/v1/files/upld/vid`, {
-        vidUrl,
-      });
+     await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/files/upld/vid`, {
+       vidUrl,
+     });
+
 
       setVideo(null);
 
@@ -51,9 +52,13 @@ const Test1 = () => {
       });
       const imgUrls = await Promise.all(imgUrlPromises);
 
-      await axios.post(`http://localhost:5000/api/v1/files/upld/img`, {
-        imgUrls,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/files/upld/img`,
+        {
+          imgUrls,
+        }
+      );
+
 
       setImages([]);
 

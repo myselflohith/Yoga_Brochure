@@ -1,4 +1,4 @@
-import { query } from "../configure/configure.js";
+import { query } from "../Configure/configure.js";
 import { hash, compare } from "bcrypt";
 
 const insertUser = async (req, res) => {
@@ -13,7 +13,7 @@ const insertUser = async (req, res) => {
 
     const hashedPassword = await hash(password, 10);
 
-    const sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
 
     const result = await query(sql, [name, email, hashedPassword]);
 
@@ -37,7 +37,7 @@ const getUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await query("SELECT * FROM users WHERE email = ?", [email]);
+    const user = await query("SELECT * FROM user WHERE email = ?", [email]);
     if (user.length === 0) {
       return res
         .status(401)

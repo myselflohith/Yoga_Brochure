@@ -24,9 +24,10 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/insert/register",
+        `${import.meta.env.VITE_API_URL}/api/v1/insert/register`,
         formData
       );
+
       console.log("Response:", response);
       if (response.data.success) {
         nav("/login");

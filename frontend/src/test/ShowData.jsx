@@ -75,8 +75,9 @@ const ShowData = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/v1/getf/getdata"
+          `${import.meta.env.VITE_API_URL}/api/v1/getf/getdata`
         );
+
 
         // Sort records by upload date in descending order
         const sortedData = response.data.data.sort(
@@ -91,7 +92,7 @@ const ShowData = () => {
           (item) => item.upload_date.split("T")[0] === latestDate.split("T")[0]
         );
 
-        console.log(latestRecords);
+        console.log("latest data",latestRecords);
         setData(latestRecords);
       } catch (error) {
         console.log(error);
@@ -114,6 +115,8 @@ const ShowData = () => {
     currentPage * recordsPerPage,
     (currentPage + 1) * recordsPerPage
   );
+
+  console.log("paginatedData", paginatedData);
 
   return (
     <div className="container-fluid flex flex-col items-center justify-center h-screen relative">

@@ -1,4 +1,4 @@
-import { query } from "../configure/configure.js";
+import { query } from "../Configure/configure.js";
 const img = "image";
 const vid = "video";
 const insertFileIntoDB = async (type, url) => {

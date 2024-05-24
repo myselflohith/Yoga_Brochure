@@ -32,7 +32,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/get/login",
+        `${import.meta.env.VITE_API_URL}/api/v1/get/login`, // Using environment variable
         formData
       );
       console.log(response.data);
